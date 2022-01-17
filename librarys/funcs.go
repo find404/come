@@ -14,9 +14,9 @@ import (
 
 // 获取系统临时目录
 func GetTmpPath() (tmpPath string) {
-	envPath := os.Getenv(clTemporaryPath)
-	if envPath == clEmptyString {
-		envPath = os.Getenv(clTmporaryPath)
+	envPath := os.Getenv(ClTemp)
+	if envPath == ClEmpty {
+		envPath = os.Getenv(ClTmp)
 	}
 	tmpPath, err := filepath.EvalSymlinks(envPath)
 	if err != nil {

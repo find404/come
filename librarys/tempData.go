@@ -51,7 +51,7 @@ func (td *tempData) SetMapStringString(name string, value string) {
 
 //设置string与int的map
 func (td *tempData) SetMapStringInt(name string, value int) {
-	if name == clEmptyString {
+	if name == ClEmpty {
 		return
 	}
 	td.Lock()
@@ -68,7 +68,7 @@ func (td *tempData) SetMapIntString(name int, value string) {
 
 //设置string与Interface的map
 func (td *tempData) SetMapStringInterface(name string, value interface{}) {
-	if name == clEmptyString {
+	if name == ClEmpty {
 		return
 	}
 	td.Lock()
@@ -78,8 +78,8 @@ func (td *tempData) SetMapStringInterface(name string, value interface{}) {
 
 //获取string与string的map
 func (td *tempData) GetMapStringString(name string) string {
-	if name == clEmptyString {
-		return clEmptyString
+	if name == ClEmpty {
+		return ClEmpty
 	}
 	td.Lock()
 	defer td.Unlock()
@@ -88,7 +88,7 @@ func (td *tempData) GetMapStringString(name string) string {
 
 //获取string与int的map
 func (td *tempData) GetMapStringInt(name string) int {
-	if name == clEmptyString {
+	if name == ClEmpty {
 		return 0
 	}
 	td.Lock()
@@ -105,7 +105,7 @@ func (td *tempData) GetMapIntString(name int) string {
 
 //获取string与interface的map
 func (td *tempData) GetMapStringInterface(name string) interface{} {
-	if name == clEmptyString {
+	if name == ClEmpty {
 		return nil
 	}
 	td.Lock()
