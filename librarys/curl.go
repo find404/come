@@ -7,6 +7,7 @@ package librarys
  * @version     0.0.1 版本号
  */
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -21,11 +22,10 @@ type HttpRequest struct {
 	ResponseStatusCode int
 	HeadersMap         map[string]string
 	RequestJsonBytes   io.Reader
-	ResponseBody       []byte
 }
 
 // 发起请求
-func (hr HttpRequest) SendHttpRequest() {
+func (hr HttpRequest) GetResponse(bodyStruct interface{}) {
 	request, err := http.NewRequest(hr.Mothod, hr.Url, hr.RequestJsonBytes)
 	request.Host = hr.HeadersMap["host"]
 	for key, header := range hr.HeadersMap {
@@ -48,7 +48,7 @@ func (hr HttpRequest) SendHttpRequest() {
 	if response.StatusCode == hr.ResponseStatusCode {
 		body, err := ioutil.ReadAll(response.Body)
 		if err == nil {
-			hr.ResponseBody = body
+			json.Unmarshal(body, &bodyStruct)
 		}
 	}
 }
@@ -63,7 +63,12 @@ func (hr *HttpRequest) SetMothodPost() {
 	hr.Mothod = "POST"
 }
 
-//设置get请求
+//设置状态码请求
 func (hr *HttpRequest) SetResponseStatusCode200() {
 	hr.ResponseStatusCode = ClHttpCode200
+}
+
+//设置状态码请求
+func (hr *HttpRequest) SetResponseStatusCode302() {
+	hr.ResponseStatusCode = ClHttpCode302
 }

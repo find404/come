@@ -71,10 +71,5 @@ func (ccf *Config) LoadIni(rootPath string, iniPath string) {
 		GetTempDataInstance().SetMapStringString(lineKey, lineVal)
 	}
 
-	ccf.SetConfigString(ClRootPath, iniPath)
-}
-
-//手动设置值
-func (ccf *Config) SetConfigString(name string, value string) {
-	GetTempDataInstance().SetMapStringString(name, value)
+	GetTempDataInstance().SetMapStringString(ClRootPath, iniPath)
 }
