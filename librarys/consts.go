@@ -28,6 +28,7 @@ const (
 	ClPoundKey       = "#"
 	ClForwardSlash   = "/"
 	ClbackwardSlash  = "\\"
+	ClEOL            = "\n"
 	ClHttpCode200    = 200
 	ClHttpCode202    = 202
 	ClHttpCode302    = 302

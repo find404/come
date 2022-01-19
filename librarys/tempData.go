@@ -41,7 +41,7 @@ func (td *tempData) initMap() {
 
 //设置string与string的map
 func (td *tempData) SetMapStringString(name string, value string) {
-	if name == "" {
+	if name == ClEmpty {
 		return
 	}
 	td.Lock()
