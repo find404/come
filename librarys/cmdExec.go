@@ -17,13 +17,13 @@ type CmdExecSingleton interface {
 	SetExecDir(name string)
 }
 
-//临时数据集
+//命令行执行类
 type cmdExec struct {
 	execDir string
 	sync.Mutex
 }
 
-//设置string与string的map
+//执行GIT命令行
 func (ce *cmdExec) ExecGitCmd(arg ...string) (string, error) {
 	ce.Lock()
 	defer ce.Unlock()
@@ -35,6 +35,7 @@ func (ce *cmdExec) ExecGitCmd(arg ...string) (string, error) {
 	return string(msg), err
 }
 
+//设置GIT命令行执行目录
 func (ce *cmdExec) SetExecDir(name string) {
 	if name == ClEmpty {
 		return
