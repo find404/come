@@ -37,9 +37,11 @@ func (ce *cmdExec) ExecGitCmd(arg ...string) (string, error) {
 
 //设置GIT命令行执行目录
 func (ce *cmdExec) SetExecDir(name string) {
+
 	if name == ClEmpty {
 		return
 	}
+
 	ce.Lock()
 	defer ce.Unlock()
 	ce.execDir = name

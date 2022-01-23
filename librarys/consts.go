@@ -29,10 +29,4 @@ const (
 	ClForwardSlash   = "/"
 	ClbackwardSlash  = "\\"
 	ClEOL            = "\n"
-	ClHttpCode200    = 200
-	ClHttpCode202    = 202
-	ClHttpCode302    = 302
-	ClHttpCode400    = 400
-	ClHttpCode404    = 400
-	ClHttpCode502    = 502
 )

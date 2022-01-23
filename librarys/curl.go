@@ -42,7 +42,7 @@ func (hr HttpRequest) GetResponse(bodyStruct interface{}) {
 	defer response.Body.Close()
 
 	if hr.ResponseStatusCode == 0 {
-		hr.ResponseStatusCode = ClHttpCode200
+		hr.ResponseStatusCode = http.StatusOK
 	}
 
 	if response.StatusCode == hr.ResponseStatusCode {
@@ -55,20 +55,20 @@ func (hr HttpRequest) GetResponse(bodyStruct interface{}) {
 
 //设置get请求
 func (hr *HttpRequest) SetMothodGet() {
-	hr.Mothod = "GET"
+	hr.Mothod = http.MethodGet
 }
 
 //设置post请求
 func (hr *HttpRequest) SetMothodPost() {
-	hr.Mothod = "POST"
+	hr.Mothod = http.MethodPost
 }
 
 //设置状态码请求
 func (hr *HttpRequest) SetResponseStatusCode200() {
-	hr.ResponseStatusCode = ClHttpCode200
+	hr.ResponseStatusCode = http.StatusOK
 }
 
 //设置状态码请求
 func (hr *HttpRequest) SetResponseStatusCode302() {
-	hr.ResponseStatusCode = ClHttpCode302
+	hr.ResponseStatusCode = http.StatusFound
 }

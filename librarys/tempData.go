@@ -13,30 +13,67 @@ import (
 //对外接口
 type TempDataSingleton interface {
 	SetMapStringString(name string, value string)
-	SetMapStringInt(name string, value int)
-	SetMapIntString(name int, value string)
-	SetMapStringInterface(name string, value interface{})
+	SetMapStringKeyString(pName string, name string, value string)
+	SetMapStringMapString(name string, value string)
 	GetMapStringString(name string) string
-	GetMapStringInt(name string) int
-	GetMapIntString(name int) string
-	GetMapStringInterface(name string) interface{}
+	GetMapStringKeyString(pName string, name string) string
+	GetMapStringMapString(name string) []string
 }
 
 //临时数据集
 type tempData struct {
 	mapStringString    map[string]string
-	mapStringInt       map[string]int
-	mapIntString       map[int]string
-	mapStringInterface map[string]interface{}
+	mapStringKeyString map[string]map[string]string
+	mapStringMapString map[string][]string
 	sync.Mutex
 }
 
 //初始化
 func (td *tempData) initMap() {
 	td.mapStringString = make(map[string]string)
-	td.mapStringInt = make(map[string]int)
-	td.mapIntString = make(map[int]string)
-	td.mapStringInterface = make(map[string]interface{})
+	td.mapStringKeyString = make(map[string]map[string]string)
+	td.mapStringMapString = make(map[string][]string)
+}
+
+//设置二维键值对的map，存储格式如下
+//{
+//  "键值":{ "下级键" :"值" }
+//}
+func (td *tempData) SetMapStringKeyString(pName string, name string, value string) {
+	if pName == ClEmpty {
+		return
+	}
+	td.Lock()
+	defer td.Unlock()
+
+	//设置值为空，为删除
+	if name == ClEmpty {
+		delete(td.mapStringKeyString, pName)
+		return
+	}
+	if _, ok := td.mapStringKeyString[pName]; !ok {
+		td.mapStringKeyString[pName] = make(map[string]string)
+	}
+	td.mapStringKeyString[pName][name] = value
+}
+
+//设置一键一map的map，存储格式如下
+//{
+//  "键值":[ "值" ]
+//}
+func (td *tempData) SetMapStringMapString(name string, value string) {
+	if name == ClEmpty {
+		return
+	}
+	td.Lock()
+	defer td.Unlock()
+
+	//设置值为空，为删除
+	if value == ClEmpty {
+		delete(td.mapStringMapString, name)
+		return
+	}
+	td.mapStringMapString[name] = append(td.mapStringMapString[name], value)
 }
 
 //设置string与string的map
@@ -46,34 +83,30 @@ func (td *tempData) SetMapStringString(name string, value string) {
 	}
 	td.Lock()
 	defer td.Unlock()
+
 	td.mapStringString[name] = value
 }
 
-//设置string与int的map
-func (td *tempData) SetMapStringInt(name string, value int) {
+//获取一键一map的map
+func (td *tempData) GetMapStringMapString(name string) []string {
 	if name == ClEmpty {
-		return
+		return []string{}
 	}
 	td.Lock()
 	defer td.Unlock()
-	td.mapStringInt[name] = value
+
+	return td.mapStringMapString[name]
 }
 
-//设置int与string的map
-func (td *tempData) SetMapIntString(name int, value string) {
-	td.Lock()
-	defer td.Unlock()
-	td.mapIntString[name] = value
-}
-
-//设置string与Interface的map
-func (td *tempData) SetMapStringInterface(name string, value interface{}) {
-	if name == ClEmpty {
-		return
+//获取二维键值对的map
+func (td *tempData) GetMapStringKeyString(pName string, name string) string {
+	if pName == ClEmpty {
+		return ClEmpty
 	}
 	td.Lock()
 	defer td.Unlock()
-	td.mapStringInterface[name] = value
+
+	return td.mapStringKeyString[pName][name]
 }
 
 //获取string与string的map
@@ -83,34 +116,8 @@ func (td *tempData) GetMapStringString(name string) string {
 	}
 	td.Lock()
 	defer td.Unlock()
+
 	return td.mapStringString[name]
-}
-
-//获取string与int的map
-func (td *tempData) GetMapStringInt(name string) int {
-	if name == ClEmpty {
-		return 0
-	}
-	td.Lock()
-	defer td.Unlock()
-	return td.mapStringInt[name]
-}
-
-//获取int与string的map
-func (td *tempData) GetMapIntString(name int) string {
-	td.Lock()
-	defer td.Unlock()
-	return td.mapIntString[name]
-}
-
-//获取string与interface的map
-func (td *tempData) GetMapStringInterface(name string) interface{} {
-	if name == ClEmpty {
-		return nil
-	}
-	td.Lock()
-	defer td.Unlock()
-	return td.mapStringInterface[name]
 }
 
 var (
